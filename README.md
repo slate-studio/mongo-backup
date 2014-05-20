@@ -36,3 +36,11 @@ Restore from FILE:
 Restore latest backup to localhost:
 
     rake mongo:restore S3_BACKUPS_BUCKET=_ AWS_ACCESS_KEY_ID=_ AWS_SECRET_ACCESS_KEY=_
+
+## Author
+
+Alexander Kravets @ [Slate Studio](http://www.slatestudio.com)
+
+## License
+
+MIT

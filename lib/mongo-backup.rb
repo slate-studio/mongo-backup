@@ -1,3 +1,5 @@
+require 'fog'
+
 module MongoBackup
 end
 
