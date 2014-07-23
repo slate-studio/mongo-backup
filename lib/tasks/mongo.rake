@@ -21,7 +21,11 @@ namespace :mongo do
 
     uri, db_name = parse_uri()
     filename     = Time.now.strftime("%Y-%m-%d_%H-%M-%S.tar.gz")
-    backup_cmd   = "mongodump -u #{uri.user} -p #{uri.password} -h #{uri.host}:#{uri.port} -d #{db_name}"
+    if uri.user
+      backup_cmd   = "mongodump -u #{uri.user} -p #{uri.password} -h #{uri.host}:#{uri.port} -d #{db_name}"
+    else
+      backup_cmd   = "mongodump -h #{uri.host}:#{uri.port} -d #{db_name}"
+    end
 
     system "cd /tmp ; #{backup_cmd} ; GZIP=-9 tar -zcvf #{filename} dump/"
 
