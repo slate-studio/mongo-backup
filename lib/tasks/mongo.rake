@@ -58,7 +58,11 @@ namespace :mongo do
 
     if Rails.env.production?
       uri, backup_db_name = parse_uri()
-      system "mongorestore -u #{uri.user} -p #{uri.password} -h #{uri.host}:#{uri.port} -d #{db_name} /tmp/dump/#{backup_db_name}"
+      if uri.user
+        system "mongorestore -u #{uri.user} -p #{uri.password} -h #{uri.host}:#{uri.port} -d #{db_name} /tmp/dump/#{backup_db_name}"
+      else
+        system "mongorestore -h #{uri.host}:#{uri.port} -d #{db_name} /tmp/dump/#{backup_db_name}"
+      end
     else
       backup_db_name = Dir.entries('/tmp/dump').select { |file| File.directory? File.join('/tmp/dump', file) }.last
       system "mongorestore -d #{db_name} /tmp/dump/#{backup_db_name}"
@@ -78,7 +82,7 @@ namespace :mongo do
     # use first mongodb server if a few provided
     first_uri = db_url.split(',').first
     uri       = URI.parse(first_uri)
-    db_name   = db_url.split('/').last
+    db_name   = Mongoid.default_session.options[:database]
 
     return uri, db_name
   end
